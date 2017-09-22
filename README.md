@@ -16,16 +16,4 @@
 * Functional Interfaces
 
 ### Java 9 - TODO
-
-> Trying out new features from Java 8, 9 and beyond.
-
-## Supported Samples
-
-### Java 8 Notables
-* Stream
-* Lambda
-* Functional Interfaces
-* Passing methods as references, like js
-
-### Java 9 - TODO
-
+* TBD
