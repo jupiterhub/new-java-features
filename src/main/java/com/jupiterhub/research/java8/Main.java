@@ -13,7 +13,7 @@ import java.util.stream.*;
 /**
  * Good commonon pitfalls on streams:
  * https://blog.jooq.org/2014/06/13/java-8-friday-10-subtle-mistakes-when-using-the-streams-api/
- *
+ * <p>
  * Cheat Sheet
  * http://files.zeroturnaround.com/pdf/zt_java8_streams_cheat_sheet.pdf
  */
@@ -22,7 +22,7 @@ public class Main {
 
     static {
         numbers = new ArrayList<>();
-        for (int i = 0; i < 10; i++) numbers.add(i);
+        for (int i = 0; i < 100; i++) numbers.add(i);
     }
 
     public static void main(String... args) throws IOException {
@@ -32,6 +32,8 @@ public class Main {
         readFileAsAStream();
 
         streamFilterEvenNumbersOnly();
+        streamFilterEvenNumbersOnlyParallel();
+
         streamOf();
         streamIterate();
         streamMap();
@@ -53,47 +55,47 @@ public class Main {
 
     private static void streamFindFirst() {
         System.out.println("\n@streamFindFirst");
-        String[] data = {"John","Paul","Mark"};
+        String[] data = {"John", "Paul", "Mark"};
         System.out.println("data: " + Arrays.asList(data));
         Stream<String> names = Stream.of(data);
         Optional<String> nameThatHasLetterA = names.filter(i -> i.contains("a")).findFirst();
 
-        if(nameThatHasLetterA.isPresent()){
-            System.out.println("First name with letter 'a' is "+ nameThatHasLetterA.get());
+        if (nameThatHasLetterA.isPresent()) {
+            System.out.println("First name with letter 'a' is " + nameThatHasLetterA.get());
         }
     }
 
     private static void streamMatch() {
         System.out.println("\n@streamMatch");
-        Stream<Integer> numbers3 = Stream.of(1,2,3,4,5);
-        System.out.println("Stream contains 4? "+numbers3.anyMatch(i -> i==4));
+        Stream<Integer> numbers3 = Stream.of(1, 2, 3, 4, 5);
+        System.out.println("Stream contains 4? " + numbers3.anyMatch(i -> i == 4));
 //Stream contains 4? true
 
-        Stream<Integer> numbers4 = Stream.of(1,2,3,4,5);
-        System.out.println("Stream contains all elements less than 10? "+numbers4.allMatch(i -> i<10));
+        Stream<Integer> numbers4 = Stream.of(1, 2, 3, 4, 5);
+        System.out.println("Stream contains all elements less than 10? " + numbers4.allMatch(i -> i < 10));
 //Stream contains all elements less than 10? true
 
-        Stream<Integer> numbers5 = Stream.of(1,2,3,4,5);
-        System.out.println("Stream doesn't contain 10? "+numbers5.noneMatch(i -> i==10));
+        Stream<Integer> numbers5 = Stream.of(1, 2, 3, 4, 5);
+        System.out.println("Stream doesn't contain 10? " + numbers5.noneMatch(i -> i == 10));
 //Stream doesn't contain 10? true
     }
 
     private static void streamSum() {
         System.out.println("\n@streamSum");
-        Stream<Integer> numbers1 = Stream.of(1,2,3,4,5);
+        Stream<Integer> numbers1 = Stream.of(1, 2, 3, 4, 5);
         System.out.println("Count: " + numbers1.count());
     }
 
     private static void streamReduce() {
         System.out.println("\n@streamReduce");
-        Stream<Integer> numbers = Stream.of(1,2,3,4,5);
+        Stream<Integer> numbers = Stream.of(1, 2, 3, 4, 5);
 
         Optional<Integer> intOptional = numbers.reduce((i, j) -> {
-            System.out.println("total (i+j): " + (i+j));
-            return i+j;
+            System.out.println("total (i+j): " + (i + j));
+            return i + j;
         });
 
-        if(intOptional.isPresent()) System.out.println("Reduced numbers= "+intOptional.get());
+        if (intOptional.isPresent()) System.out.println("Reduced numbers= " + intOptional.get());
     }
 
     private static void streamFlatMap() {
@@ -114,14 +116,14 @@ public class Main {
         System.out.println("\n@streamMap");
         Stream<String> names = Stream.of("John", "Williams", "Peter");
         System.out.println(names.map(String::toUpperCase)   // automatically uppercases the parameter
-            .collect(Collectors.toList())
+                .collect(Collectors.toList())
         );
     }
 
     private static void streamOf() {
         System.out.println("\n@streamOf");
-        Map<String,Integer> keyValuePairs = Stream.of(1,2,3,4)
-                .collect(Collectors.toMap(key -> "key-"+key, val -> val*2));
+        Map<String, Integer> keyValuePairs = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.toMap(key -> "key-" + key, val -> val * 2));
         System.out.println(keyValuePairs);
     }
 
@@ -137,7 +139,7 @@ public class Main {
         Path path = Paths.get("src/main/resources/flashlight-lyrics.txt");
         // this is efficient because it only stores per line in the memory
         Stream<String> stream = Files.lines(path);
-        stream.filter(line -> line.contains("I"))
+        stream.filter(line -> line.contains("flashlight"))
                 .forEach(System.out::println);
     }
 
@@ -155,6 +157,13 @@ public class Main {
 
     private static void streamFilterEvenNumbersOnly() {
         System.out.println("\n@streamFilterEvenNumbersOnly");
+        numbers.stream()
+                .filter(number -> number % 2 == 0)
+                .forEach(number -> System.out.print(" " + number));
+    }
+
+    private static void streamFilterEvenNumbersOnlyParallel() {
+        System.out.println("\n@streamFilterEvenNumbersOnlyParallel");
         numbers.stream()
                 .filter(number -> number % 2 == 0)
                 .forEach(number -> System.out.print(" " + number));
