@@ -7,10 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.*;
 
 public class Main {
@@ -33,6 +30,21 @@ public class Main {
 
         streamMap();
         streamFlatMap();
+
+
+        streamReduce();
+    }
+
+    private static void streamReduce() {
+        System.out.println("\n@streamReduce");
+        Stream<Integer> numbers = Stream.of(1,2,3,4,5);
+
+        Optional<Integer> intOptional = numbers.reduce((i, j) -> {
+            System.out.println("total (i+j): " + (i+j));
+            return i+j;
+        });
+
+        if(intOptional.isPresent()) System.out.println("Reduced numbers= "+intOptional.get());
     }
 
     private static void streamFlatMap() {
