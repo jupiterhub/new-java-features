@@ -10,6 +10,13 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.*;
 
+/**
+ * Good commonon pitfalls on streams:
+ * https://blog.jooq.org/2014/06/13/java-8-friday-10-subtle-mistakes-when-using-the-streams-api/
+ *
+ * Cheat Sheet
+ * http://files.zeroturnaround.com/pdf/zt_java8_streams_cheat_sheet.pdf
+ */
 public class Main {
     private static List<Integer> numbers;
 
@@ -21,18 +28,60 @@ public class Main {
     public static void main(String... args) throws IOException {
         doForEach();
         functionalInterface();
-        streamFilterEvenNumbersOnly();
         printUsingNewDateMethods();
         readFileAsAStream();
 
+        streamFilterEvenNumbersOnly();
         streamOf();
         streamIterate();
-
         streamMap();
         streamFlatMap();
-
-
         streamReduce();
+        streamSum();
+        streamMatch();
+        streamFindFirst();
+        streamGenerate();
+    }
+
+    private static void streamGenerate() {
+        System.out.println("\n@streamGenerate");
+
+        Stream.generate(Math::random)
+                .limit(10)
+                .forEach(System.out::println);
+    }
+
+    private static void streamFindFirst() {
+        System.out.println("\n@streamFindFirst");
+        String[] data = {"John","Paul","Mark"};
+        System.out.println("data: " + Arrays.asList(data));
+        Stream<String> names = Stream.of(data);
+        Optional<String> nameThatHasLetterA = names.filter(i -> i.contains("a")).findFirst();
+
+        if(nameThatHasLetterA.isPresent()){
+            System.out.println("First name with letter 'a' is "+ nameThatHasLetterA.get());
+        }
+    }
+
+    private static void streamMatch() {
+        System.out.println("\n@streamMatch");
+        Stream<Integer> numbers3 = Stream.of(1,2,3,4,5);
+        System.out.println("Stream contains 4? "+numbers3.anyMatch(i -> i==4));
+//Stream contains 4? true
+
+        Stream<Integer> numbers4 = Stream.of(1,2,3,4,5);
+        System.out.println("Stream contains all elements less than 10? "+numbers4.allMatch(i -> i<10));
+//Stream contains all elements less than 10? true
+
+        Stream<Integer> numbers5 = Stream.of(1,2,3,4,5);
+        System.out.println("Stream doesn't contain 10? "+numbers5.noneMatch(i -> i==10));
+//Stream doesn't contain 10? true
+    }
+
+    private static void streamSum() {
+        System.out.println("\n@streamSum");
+        Stream<Integer> numbers1 = Stream.of(1,2,3,4,5);
+        System.out.println("Count: " + numbers1.count());
     }
 
     private static void streamReduce() {
