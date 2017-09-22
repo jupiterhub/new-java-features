@@ -16,5 +16,11 @@
 * Lambda
 * Functional Interfaces
 
-### Java 9 - TODO
-* TBD
+### Java 9
+* jshell. REPL (Read-Evaluate-Print-Loop)
+* Factory Methods on Collections (finally)
+* Project Jigsaw (might not be that relevant because of existing tools like gradle/maven)
+* Stackwalker (examining the stacks)
+* Java 9 Streams (Reactive)
+* JLink - Smaller JRE packaged just for your project
+* New Versioning scheme drops 1.9 just 9
