@@ -6,10 +6,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.*;
 
 public class Main {
@@ -27,6 +28,47 @@ public class Main {
         printUsingNewDateMethods();
         readFileAsAStream();
 
+        streamOf();
+        streamIterate();
+
+        streamMap();
+        streamFlatMap();
+    }
+
+    private static void streamFlatMap() {
+        System.out.println("\n@streamFlatMap");
+        List<List<Integer>> collect = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4)).collect(Collectors.toList());
+        System.out.println("Before FlatMap" + collect);
+
+
+        List<Integer> together = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4)) // Stream of List<Integer>
+                .flatMap(List::stream)
+                .map(integer -> integer)
+                .collect(Collectors.toList());
+
+        System.out.println("After FlatMap: " + together);
+    }
+
+    private static void streamMap() {
+        System.out.println("\n@streamMap");
+        Stream<String> names = Stream.of("John", "Williams", "Peter");
+        System.out.println(names.map(String::toUpperCase)   // automatically uppercases the parameter
+            .collect(Collectors.toList())
+        );
+    }
+
+    private static void streamOf() {
+        System.out.println("\n@streamOf");
+        Map<String,Integer> keyValuePairs = Stream.of(1,2,3,4)
+                .collect(Collectors.toMap(key -> "key-"+key, val -> val*2));
+        System.out.println(keyValuePairs);
+    }
+
+    private static void streamIterate() {
+        System.out.println("\n@streamIterate");
+        Stream.iterate("value", (val) -> "function(" + val + ")")
+                .limit(5)   // without this, it will be infinte
+                .forEach((val) -> System.out.println(val));
     }
 
     private static void readFileAsAStream() throws IOException {
