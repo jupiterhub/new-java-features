@@ -26,6 +26,8 @@ public class Main {
     }
 
     public static void main(String... args) throws IOException {
+        lambdaVsNormalAnonymous();
+
         doForEach();
         functionalInterface();
         printUsingNewDateMethods();
@@ -43,6 +45,21 @@ public class Main {
         streamMatch();
         streamFindFirst();
         streamGenerate();
+    }
+
+    private static void lambdaVsNormalAnonymous() {
+        // for IntelliJ users use shift+ctrl+space to autocomplete lambda
+        Runnable runLambda = () -> System.out.println("yo");
+
+        Runnable run = new Runnable() {
+
+            @Override
+            public void run() {
+                System.out.println("YO");
+            }
+        };
+        runLambda.run();
+        run.run();
     }
 
     private static void streamGenerate() {
